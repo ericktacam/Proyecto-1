@@ -4,7 +4,7 @@ int bloque1_f3,bloque2_f3, bloque3_f3,bloque4_f3,bloque5_f3,bloque6_f3,bloque7_f
 int bloque1_f2,bloque2_f2,bloque3_f2,bloque4_f2,bloque5_f2;
 int bloque1_f1,bloque2_f1,bloque3_f1;
 bool seleccion_fila = true,turno,columna = true;
-int no_columna,puntaje_j1,puntaje_j2,partida,selecciones;
+int no_columna,puntaje_j1 = 0,puntaje_j2 = 0,partida,selecciones;
 char no_fila[7];
 
 int fila1(int i){
@@ -130,8 +130,6 @@ int nueva_partida(int i){
 	bloque1_f1 = 1;
 	bloque2_f1 = 1;
 	bloque3_f1 = 1;
-	puntaje_j1 = 0;
-	puntaje_j2 = 0;
 	return 0;
 	};
 	return -1;
@@ -264,10 +262,10 @@ int main(int argc, char *argv[]) {
 						break;
 					}
 					if(turno == true){
-						puntaje_j1 = puntaje_j1+(digito);
+						puntaje_j1 = puntaje_j1;
 					}
 					if(turno == false){
-						puntaje_j2 = puntaje_j2+(digito);
+						puntaje_j2 = puntaje_j2;
 					}
 				}
 				turno = !turno;
@@ -278,6 +276,7 @@ int main(int argc, char *argv[]) {
 			cout<<endl;
 			cout<<endl<<"                    fin de la partida "<<endl;
 			if(turno == false){
+				puntaje_j2 = puntaje_j2+3;
 				cout<<"     jugador 1 pierde"<<endl;
 				cout<<"     resultados: "<<puntaje_j1<<endl;
 				cout<<"     jugador 2 gana"<<endl;
@@ -287,6 +286,7 @@ int main(int argc, char *argv[]) {
 				cout<<"     resultados: "<<puntaje_j2<<endl;
 				cout<<"     jugador 1 gana"<<endl;
 				cout<<"     resultados: %i\n"<<puntaje_j1<<endl;
+				puntaje_j1= puntaje_j1+3;
 			}
 			cout<<endl;
 			cout<<"desea regresar al menu s o n?";
@@ -323,3 +323,5 @@ int main(int argc, char *argv[]) {
 	}while(reiniciar == 1||regresar == 's');
 	return 0;
 }
+
+
