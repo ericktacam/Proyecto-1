@@ -3,143 +3,182 @@
 #include <string.h>
 
 int filas[3][7];
-int puntaje_j1 = 0, puntaje_j2 = 0;
+int seleccion_fila = 1, turno = 1, columna = 1;
+int no_columna, puntaje_j1 = 0, puntaje_j2 = 0, partida;
+char no_fila[20];
 
-/* Inicializa las filas */
-void nueva_partida(){
-	int base[3] = {3,5,7};
-	for(int i=0;i<3;i++){
-		for(int j=0;j<7;j++){
-			if(j < base[i])
-				filas[i][j] = 1;
-			else
-				filas[i][j] = 0;
+void fila1(int i){
+	if(i==1){
+		printf("\n\n\n");
+		printf("                         ");
+		for(int j=0;j<3;j++){
+			if(filas[0][j]==1) printf("[%d] ", j+1);
+			else printf("    ");
 		}
+		printf("\n");
 	}
 }
 	
-	/* Muestra el tablero */
-	void mostrar(){
-		printf("\n");
-		for(int i=0;i<3;i++){
-			printf("Fila %d: ", i+1);
-			for(int j=0;j<7;j++){
-				if(filas[i][j] == 1)
-					printf("[%d]", j+1);
-				else
-					printf("   ");
+	void fila2(int i){
+		if(i==1){
+			printf("                     ");
+			for(int j=0;j<5;j++){
+				if(filas[1][j]==1) printf("[%d] ", j+1);
+				else printf("    ");
 			}
 			printf("\n");
 		}
 	}
 		
-		/* Cuenta cuántas casillas quedan */
-		int contar_restantes(){
-			int total = 0;
-			for(int i=0;i<3;i++)
-				for(int j=0;j<7;j++)
-				total += filas[i][j];
-				return total;
+		void fila3(int i){
+			if(i==1){
+				printf("                 ");
+				for(int j=0;j<7;j++){
+					if(filas[2][j]==1) printf("[%d] ", j+1);
+					else printf("    ");
+				}
+				printf("\n");
+			}
 		}
 			
-			/* Elimina posiciones elegidas */
-			void eliminar(int fila, char posiciones[]){
-				for(int i=0; posiciones[i] != '\0'; i++){
-					int pos = posiciones[i] - '0' - 1;
-					if(pos >= 0 && pos < 7 && filas[fila][pos] == 1){
-						filas[fila][pos] = 0;
-					}
+			void suma(int i){
+				if(i==1){
+					partida = 0;
+					for(int a=0;a<3;a++)
+						for(int b=0;b<7;b++)
+						partida += filas[a][b];
 				}
 			}
 				
-				int main(){
-					char jugador1[20], jugador2[20];
-					int opcion, turno, fila;
-					char quitar[20], regresar;
-					
-					do{
-						system("cls"); // usa "clear" si estás en Linux
-						printf("1. Nueva partida\n");
-						printf("2. Reglas\n");
-						printf("3. Puntajes\n");
-						printf("4. Salir\n");
-						scanf("%d", &opcion);
-						
-						switch(opcion){
-							
-						case 1:
-							printf("Nombre jugador 1: ");
-							scanf("%s", jugador1);
-							printf("Nombre jugador 2: ");
-							scanf("%s", jugador2);
-							
-							nueva_partida();
-							turno = 1;
-							
-							while(contar_restantes() > 1){
-								system("cls");
-								printf("%s (%d puntos) vs %s (%d puntos)\n",
-									   jugador1, puntaje_j1, jugador2, puntaje_j2);
-								
-								mostrar();
-								
-								if(turno)
-									printf("Turno de %s\n", jugador1);
-								else
-									printf("Turno de %s\n", jugador2);
-								
-								printf("Seleccione fila (1-3): ");
-								scanf("%d", &fila);
-								
-								printf("Posiciones a quitar (ej: 135): ");
-								scanf("%s", quitar);
-								
-								eliminar(fila-1, quitar);
-								
-								turno = !turno;
+				void nueva_partida(int i){
+					if(i==1){
+						int base[3]={3,5,7};
+						for(int a=0;a<3;a++){
+							for(int b=0;b<7;b++){
+								if(b<base[a]) filas[a][b]=1;
+								else filas[a][b]=0;
 							}
-							
-							system("cls");
-							mostrar();
-							printf("\nFIN DE LA PARTIDA\n");
-							
-							/* El turno ya cambió, el ganador es el contrario */
-							if(turno){
-								printf("Gana %s\n", jugador1);
-								puntaje_j1 += 3;
-							}else{
-								printf("Gana %s\n", jugador2);
-								puntaje_j2 += 3;
-							}
-							
-							printf("Presione s para volver al menu: ");
-							scanf(" %c", &regresar);
-							break;
-							
-						case 2:
-							system("cls");
-							printf("Reglas del juego (Nim):\n");
-							printf("- Hay 3 filas con 3, 5 y 7 objetos.\n");
-							printf("- En tu turno puedes quitar uno o varios de UNA sola fila.\n");
-							printf("- El jugador que deja un solo objeto pierde.\n");
-							printf("Presione s para volver: ");
-							scanf(" %c", &regresar);
-							break;
-							
-						case 3:
-							system("cls");
-							printf("Puntajes:\n");
-							printf("%s: %d puntos\n", jugador1, puntaje_j1);
-							printf("%s: %d puntos\n", jugador2, puntaje_j2);
-							printf("Presione s para volver: ");
-							scanf(" %c", &regresar);
-							break;
-							
-						case 4:
-							exit(0);
 						}
-						
-					}while(regresar == 's');
-					
-					return 0;
+					}
 				}
+					
+					void eliminar(int fila, char posiciones[]){
+						for(int i=0; posiciones[i]!='\0'; i++){
+							int pos = posiciones[i]-'0'-1;
+							if(pos>=0 && pos<7){
+								if(filas[fila][pos]==1){
+									filas[fila][pos]=0;
+								}
+							}
+						}
+					}
+						
+						int main(){
+							char jugador1[20], jugador2[20], regresar='s';
+							int opcion_menu, reiniciar, limpieza;
+							
+							do{
+								system("cls");
+								reiniciar = 0;
+								
+								printf("\n\n\n");
+								printf("                    1. nueva partida\n");
+								printf("                    2. reglas\n");
+								printf("                    3. puntajes\n");
+								printf("                    4. salir\n");
+								scanf("%d",&opcion_menu);
+								
+								switch(opcion_menu){
+								case 1:
+									system("cls");
+									printf("\n\n\n");
+									printf("                    ingrese el jugador 1\n");
+									scanf("%s",jugador1);
+									printf("                    ingrese el jugador 2\n");
+									scanf("%s",jugador2);
+									
+									nueva_partida(1);
+									turno = 1;
+									
+									do{
+										suma(1);
+										limpieza = 0;
+										system("cls");
+										
+										printf("%s                                           %s\n",jugador1,jugador2);
+										printf("%d                                           %d\n",puntaje_j1,puntaje_j2);
+										
+										fila1(1);
+										fila2(1);
+										fila3(1);
+										
+										if(turno) printf("turno de jugador 1\n");
+										else printf("turno de jugador 2\n");
+										
+										if(partida<=1){
+											columna = 0;
+											seleccion_fila = 1;
+										}
+										
+										if(columna){
+											printf("\n seleccione la fila: ");
+											scanf("%d",&no_columna);
+											columna = 0;
+											seleccion_fila = 0;
+											limpieza = 1;
+										}
+										
+										if(!seleccion_fila){
+											printf("seleccione los objetos a robar: ");
+											scanf("%s",no_fila);
+											eliminar(no_columna-1,no_fila);
+											columna = 1;
+											seleccion_fila = 1;
+											limpieza = 1;
+										}
+										
+										turno = !turno;
+										
+									}while(limpieza==1);
+									
+									system("cls");
+									printf("\n\n\n\n                    fin de la partida\n");
+									
+									if(turno){
+										printf("     jugador 1 gana\n");
+										puntaje_j1 += 3;
+									}else{
+										printf("     jugador 2 gana\n");
+										puntaje_j2 += 3;
+									}
+									
+									printf("\ndesea regresar al menu s o n? ");
+									scanf(" %c",&regresar);
+									break;
+									
+								case 2:
+									system("cls");
+									printf("1. juegan dos personas un turno a la vez\n");
+									printf("2. existen tres filas con objetos\n");
+									printf("3. se pueden retirar varios objetos de una misma fila\n");
+									printf("4. el jugador que deja un solo objeto pierde\n");
+									printf("\nprecione s para volver\n");
+									scanf(" %c",&regresar);
+									break;
+									
+								case 3:
+									system("cls");
+									printf("\n\n\n");
+									printf("                   puntaje del J1: %d\n",puntaje_j1);
+									printf("                   puntaje del J2: %d\n",puntaje_j2);
+									printf("\nprecione s para volver\n");
+									scanf(" %c",&regresar);
+									break;
+									
+								case 4:
+									exit(0);
+								}
+							}while(regresar=='s');
+							
+							return 0;
+						}
